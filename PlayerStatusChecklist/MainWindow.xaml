@@ -1,0 +1,132 @@
+﻿<Window x:Class="PlayerStatusChecklist.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PlayerStatusChecklist"
+        mc:Ignorable="d" FontSize="12" FontFamily="Arial" 
+        WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize"
+        WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        BorderBrush="{DynamicResource WindowBorderColor}" BorderThickness="1"
+        Title="Player Status Checklist" SizeToContent="WidthAndHeight" Background="{DynamicResource BackdropColor}"
+        xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/GeneralButtonStyle.xaml" />
+                <ResourceDictionary Source="/Styles/TitlebarButtonStyle.xaml" />
+                <ResourceDictionary Source="/Styles/ListBoxItemStyle.xaml" />
+                <ResourceDictionary Source="/Styles/ComboBoxStyle.xaml" />
+                <ResourceDictionary Source="/Themes/DarkModeColors.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+
+        <!-- Minimize and close buttons -->
+        <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="7" Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button x:Name="MinimizeButton" Content="—" Width="30" Height="30"
+                    Style="{StaticResource TitlebarButtonStyle}" BorderBrush="Transparent"
+                    Background="Transparent" Click="MinimizeButton_Click"/>
+            <Button x:Name="CloseButton" Content="X" Width="30" Height="30"
+                    Style="{StaticResource TitlebarButtonStyle}" BorderBrush="Transparent"
+                    Background="Transparent" Click="CloseButton_Click"/>
+        </StackPanel>
+
+        <!-- Title -->
+        <Label Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="5" FontSize="36" Margin="0,0,0,10"
+               Content="Player Status Checklist" VerticalContentAlignment="Center"
+               HorizontalContentAlignment="Center" Foreground="{StaticResource BackdropTextColor}"/>
+
+        <!-- Left Section -->
+        <StackPanel Grid.Column="2" Grid.Row="3">
+            <Label Content="Name:" FontSize="16" FontWeight="Bold" Foreground="{StaticResource BackdropTextColor}"
+               VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
+            <ListBox x:Name="PlayerNameListBox" Width="200" Height="500" SelectionChanged="PlayerNameListBox_SelectionChanged"
+                     ItemContainerStyle="{StaticResource CustomListBoxItemContainerStyle}" Background="{StaticResource CardColor}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" Foreground="{StaticResource ListBoxItemTextColor}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+        <TextBox x:Name="NewNameEntryTextBox" Grid.Column="2" Grid.Row="4" Width="200" Height="20" HorizontalAlignment="Left"
+                 Padding="2" MaxLength="35" Margin="0,15,0,15" Background="{StaticResource CardColor}"
+                 Foreground="{StaticResource CardTextColor}"/>
+
+        <!-- Right Section -->
+        <StackPanel Grid.Column="4" Grid.Row="3">
+            <Label Content="Player Select Action:" FontSize="16" FontWeight="Bold" VerticalContentAlignment="Center"
+                   HorizontalContentAlignment="Left" Foreground="{StaticResource BackdropTextColor}"/>
+            <ComboBox x:Name="SelectActionComboBox" Height="20" VerticalAlignment="Top"
+                      Width="200" HorizontalAlignment="Left">
+            </ComboBox>
+            <TextBlock Text="After the action is selected, click on a player name in the list to make the respective change."
+                       TextWrapping="Wrap" Width="300"  HorizontalAlignment="Left" Margin="0,15,0,0"
+                       Foreground="{StaticResource BackdropTextColor}"/>
+            <Label Content="Color Code:" FontSize="16" FontWeight="Bold" Margin="0,30,0,0"
+                   HorizontalContentAlignment="Left" Foreground="{StaticResource BackdropTextColor}"/>
+            <StackPanel Orientation="Horizontal" Width="300" HorizontalAlignment="Left">
+                <StackPanel HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal" Width="120">
+                        <Rectangle Width="12" Height="12" Fill="{Binding statusColorSelection.LightGreen}" Stroke="Black"/>
+                        <Label Content="Available" Foreground="{StaticResource BackdropTextColor}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Width="12" Height="12" Fill="{Binding statusColorSelection.LightOrange}" Stroke="Black"/>
+                        <Label Content="Maybe" Foreground="{StaticResource BackdropTextColor}"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Width="12" Height="12" Fill="{Binding statusColorSelection.LightGray}" Stroke="Black"/>
+                        <Label Content="No Response" Foreground="{StaticResource BackdropTextColor}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Width="12" Height="12" Fill="{Binding statusColorSelection.LightRed}" Stroke="Black"/>
+                        <Label Content="Unavailable" Foreground="{StaticResource BackdropTextColor}"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+            <Label Content="Custom Message Input:" FontSize="16" FontWeight="Bold" Margin="0,30,0,0"
+               VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Foreground="{StaticResource BackdropTextColor}"/>
+            <TextBox Width="300" Height="80" VerticalScrollBarVisibility="Visible" TextWrapping="Wrap"
+                     HorizontalAlignment="Left" Padding="4" Text="{Binding messageStrings.UserInputString, UpdateSourceTrigger=PropertyChanged}"
+                     Background="{StaticResource CardColor}" Foreground="{StaticResource CardTextColor}"/>
+            <Label Content="Generated Message" FontSize="16" FontWeight="Bold" HorizontalContentAlignment="Left"
+                   Margin="0,30,0,0" Foreground="{StaticResource BackdropTextColor}"/>
+            <Border BorderThickness="1" BorderBrush="Gray">
+                <ScrollViewer Height="130" Width="300" Background="{StaticResource CardColor}">
+                    <TextBlock TextWrapping="Wrap" Margin="4" Background="{StaticResource CardColor}" Foreground="{StaticResource CardTextColor}">
+                        <Run Text="{Binding messageStrings.UserInputString}"/>
+                        <Run Text="{Binding messageStrings.TaggedPlayerNamesString}"/>
+                    </TextBlock>
+                </ScrollViewer>
+            </Border>
+        </StackPanel>
+        <Button x:Name="AddPlayerButton" Grid.Column="4" Grid.Row="4" Content="Add Player" Height="20" Width="125"
+                 HorizontalAlignment="Left" Click="AddPlayerButton_Click" Style="{StaticResource GeneralButtonStyle}"/>
+        <Button x:Name="CopyMessageButton" Grid.Column="4" Grid.Row="4" Content="Copy Message" Height="20" Width="125"
+                    HorizontalAlignment="Right" Click="CopyMessageButton_Click" Style="{StaticResource GeneralButtonStyle}"/>
+    </Grid>
+</Window>

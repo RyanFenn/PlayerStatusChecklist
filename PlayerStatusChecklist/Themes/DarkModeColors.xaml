@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <SolidColorBrush Color="#FF4C4C4C" x:Key="BackdropColor"/>
+    <SolidColorBrush Color="Ivory" x:Key="BackdropTextColor"/>
+
+    <!-- CardColor is the background color for things like ListBoxes, TextBoxes, TextBlocks, etc. -->
+    <SolidColorBrush Color="#FF292929" x:Key="CardColor"/>
+
+    <!-- Text color for TextBoxes, TextBlocks, etc. -->
+    <SolidColorBrush Color="Ivory" x:Key="CardTextColor"/>
+    
+    <SolidColorBrush Color="Black" x:Key="ListBoxItemTextColor"/>
+    <SolidColorBrush Color="LightGray" x:Key="WindowBorderColor"/>
+</ResourceDictionary>
