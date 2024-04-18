@@ -1,0 +1,46 @@
+name: Build and Release Executable
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build:
+    runs-on: windows-latest
+        
+    # softprops/action-gh-release needs write permission.
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore            
+
+      - name: Publish
+        run: dotnet publish -r win-x64 -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true --self-contained true -p:PublishDir=publish
+
+      - name: Zip Executable File
+        run: Compress-Archive -Path PlayerStatusChecklist/publish/*.exe -Destination PlayerStatusChecklist/publish/PlayerStatusChecklist.zip -CompressionLevel Optimal
+
+      # The executable file (artifact) is large, so it is deleted to save space. This artifact is no longer needed after zipping it.
+      - name: Remove Original Executable File
+        run: Remove-Item -Path PlayerStatusChecklist/publish/*.exe -Force
+
+      - name: Upload Executable to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: PlayerStatusChecklist/publish/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
